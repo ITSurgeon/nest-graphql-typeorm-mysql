@@ -1,8 +1,9 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PostEntity } from 'src/posts/entities/post.entity';
 import { CreatePostInput } from 'src/posts/inputs/create-post.input';
 import { UpdatePostInput } from 'src/posts/inputs/update-post.input';
 import { PostService } from 'src/posts/services/post/post.service';
+import { PostPaginationType } from 'src/posts/types/post-pagination.type';
 
 @Resolver('Post')
 export class PostResolver {
@@ -23,11 +24,11 @@ export class PostResolver {
     return this.postService.deletePost(id);
   }
 
-  @Query(() => [PostEntity])
+  @Query(() => PostPaginationType)
   async getPosts(
-    @Args('limit') limit: number,
-    @Args('page') page: number,
-  ): Promise<{ data: PostEntity[]; countAll: number; page: number }> {
+    @Args('limit', { type: () => Int, defaultValue: 10 }) limit: number,
+    @Args('page', { type: () => Int, defaultValue: 1 }) page: number,
+  ): Promise<PostPaginationType> {
     return await this.postService.getPosts(limit, page);
   }
 
