@@ -6,5 +6,5 @@ export class CreatePostInput {
   text: string;
 
   @Field({ nullable: true })
-  image: string;
+  image?: string;
 }

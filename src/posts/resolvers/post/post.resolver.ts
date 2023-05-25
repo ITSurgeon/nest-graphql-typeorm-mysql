@@ -9,31 +9,30 @@ export class PostResolver {
   constructor(private readonly postService: PostService) {}
 
   @Mutation(() => PostEntity)
-  async createPost(
-    @Args('createPostInput') createPostInput: CreatePostInput,
-  ): Promise<PostEntity> {
-    return await this.postService.createPost(createPostInput);
+  createPost(@Args('input') input: CreatePostInput): Promise<PostEntity> {
+    return this.postService.createPost(input);
   }
 
   @Mutation(() => PostEntity)
-  async updatePost(
-    @Args('updatePostInput') updatePostInput: UpdatePostInput,
-  ): Promise<PostEntity> {
-    return await this.postService.updatePost(updatePostInput);
+  async updatePost(@Args('input') input: UpdatePostInput): Promise<PostEntity> {
+    return await this.postService.updatePost(input);
   }
 
-  @Mutation(() => Number)
-  async deletePost(@Args('id') id: number): Promise<number> {
-    return await this.postService.deletePost(id);
+  @Mutation(() => Boolean)
+  deletePost(@Args('id') id: number): Promise<boolean> {
+    return this.postService.deletePost(id);
   }
 
   @Query(() => [PostEntity])
-  async getPosts(): Promise<PostEntity[]> {
-    return await this.postService.getPosts();
+  async getPosts(
+    @Args('limit') limit: number,
+    @Args('page') page: number,
+  ): Promise<{ data: PostEntity[]; countAll: number; page: number }> {
+    return await this.postService.getPosts(limit, page);
   }
 
   @Query(() => PostEntity)
-  async getPost(@Args('id') id: number): Promise<PostEntity> {
-    return await this.postService.getPost(id);
+  getPost(@Args('id') id: number): Promise<PostEntity> {
+    return this.postService.getPost(id);
   }
 }
