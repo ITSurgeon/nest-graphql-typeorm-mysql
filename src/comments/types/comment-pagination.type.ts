@@ -1,10 +1,10 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { PostEntity } from '../dto/post.dto';
+import { CommentEntity } from '../dto/comment.dto';
 
 @ObjectType()
-export class PostPaginationType {
-  @Field(() => [PostEntity])
-  data: PostEntity[];
+export class CommentPaginationType {
+  @Field(() => [CommentEntity])
+  data: CommentEntity[];
 
   @Field(() => Int)
   totalCount: number;

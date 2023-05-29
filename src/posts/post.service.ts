@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PostEntity } from 'src/posts/entities/post.entity';
-import { UpdatePostInput } from 'src/posts/inputs/update-post.input';
+import { PostEntity } from 'src/posts/dto/post.dto';
 import { DeepPartial, Repository } from 'typeorm';
+import { PostUpdateInput } from './dto/post.input';
 
 @Injectable()
 export class PostService {
@@ -18,15 +18,15 @@ export class PostService {
   async getPosts(
     limit: number,
     page: number,
-  ): Promise<{ data: PostEntity[]; countAll: number; page: number }> {
-    const [posts, countAll] = await this.postRepository.findAndCount({
+  ): Promise<{ data: PostEntity[]; totalCount: number; page: number }> {
+    const [posts, totalCount] = await this.postRepository.findAndCount({
       take: limit,
       skip: page > 0 ? (page - 1) * limit : 0,
     });
 
     return {
       data: posts,
-      countAll,
+      totalCount,
       page,
     };
   }
@@ -35,12 +35,9 @@ export class PostService {
     return await this.postRepository.findOneBy({ id });
   }
 
-  async updatePost(updatePostInput: UpdatePostInput): Promise<PostEntity> {
-    await this.postRepository.update(
-      { id: updatePostInput.id },
-      { ...updatePostInput },
-    );
-    return await this.postRepository.findOneBy({ id: updatePostInput.id });
+  async updatePost(id: number, input: PostUpdateInput): Promise<PostEntity> {
+    await this.postRepository.update({ id }, { ...input });
+    return await this.postRepository.findOneBy({ id });
   }
 
   async deletePost(id: number): Promise<boolean> {

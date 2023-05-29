@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { CommentEntity } from 'src/comments/entities/comment.entity';
+import { CommentEntity } from 'src/comments/dto/comment.dto';
 import {
   Column,
   CreateDateColumn,

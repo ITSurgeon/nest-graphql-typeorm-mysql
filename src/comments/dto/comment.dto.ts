@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { PostEntity } from 'src/posts/entities/post.entity';
+import { PostEntity } from 'src/posts/dto/post.dto';
 import {
   Column,
   CreateDateColumn,
