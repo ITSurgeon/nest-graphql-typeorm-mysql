@@ -15,10 +15,10 @@ export async function paginate<T>(
 ): Promise<PaginationResult<T>> {
   const { limit, page } = options;
 
-  const [data, totalCount] = await repository
-    .take(limit)
-    .skip(page > 0 ? (page - 1) * limit : 0)
-    .getManyAndCount();
+  const [data, totalCount] = await repository.getManyAndCount({
+    take: limit,
+    skip: page > 0 ? (page - 1) * limit : 0,
+  });
 
   return {
     data,
