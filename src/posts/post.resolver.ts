@@ -3,11 +3,6 @@ import { PostEntity } from 'src/posts/dto/post.dto';
 import { PostCreateInput, PostUpdateInput } from 'src/posts/dto/post.input';
 import { PostPaginationType } from 'src/posts/types/post-pagination.type';
 import { PostService } from './post.service';
-import {
-  PaginationOptions,
-  PaginationResult,
-  paginate,
-} from 'src/common/pagination';
 
 @Resolver('Post')
 export class PostResolver {
@@ -19,11 +14,11 @@ export class PostResolver {
   }
 
   @Mutation(() => PostEntity)
-  async updatePost(
+  updatePost(
     @Args('id', { type: () => Int }) id: number,
     @Args('input') input: PostUpdateInput,
   ): Promise<PostEntity> {
-    return await this.postService.updatePost(id, input);
+    return this.postService.updatePost(id, input);
   }
 
   @Mutation(() => Boolean)
@@ -32,11 +27,11 @@ export class PostResolver {
   }
 
   @Query(() => PostPaginationType)
-  async getPosts(
+  getPosts(
     @Args('limit', { type: () => Int, defaultValue: 10 }) limit: number,
     @Args('page', { type: () => Int, defaultValue: 1 }) page: number,
   ): Promise<PostPaginationType> {
-    return await this.postService.getPosts({ limit, page });
+    return this.postService.getPosts({ limit, page });
   }
 
   @Query(() => PostEntity)

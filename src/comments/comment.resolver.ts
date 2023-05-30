@@ -2,19 +2,19 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CommentEntity } from 'src/comments/dto/comment.dto';
 import { CommentCreateInput } from 'src/comments/dto/comment.input';
 import { CommentService } from './comment.service';
+import { PaginationOffsetResult } from '../common/pagination';
 import { CommentPaginationType } from './types/comment-pagination.type';
-import { PaginationResult } from '../common/pagination';
 
 @Resolver('Comment')
 export class CommentResolver {
   constructor(private readonly commentService: CommentService) {}
 
   @Mutation(() => CommentEntity)
-  async createComment(
+  createComment(
     @Args('postId') postId: number,
     @Args('createCommentInput') commentCreateInput: CommentCreateInput,
   ): Promise<CommentEntity> {
-    return await this.commentService.createComment(postId, commentCreateInput);
+    return this.commentService.createComment(postId, commentCreateInput);
   }
 
   @Mutation(() => Boolean)
@@ -23,15 +23,15 @@ export class CommentResolver {
   }
 
   @Query(() => CommentPaginationType)
-  async getComments(
+  getComments(
     @Args('limit', { type: () => Number, defaultValue: 10 }) limit: number,
     @Args('page', { type: () => Number, defaultValue: 1 }) page: number,
-  ): Promise<CommentPaginationType> {
-    return await this.commentService.getComments({ limit, page });
-    }
+  ): Promise<PaginationOffsetResult<CommentEntity>> {
+    return this.commentService.getComments({ limit, page });
+  }
 
-  @Query(() => CommentEntity)
-  async getComment(@Args('id') id: number): Promise<CommentEntity> {
-    return await this.commentService.getComment(id);
+  @Query(() => CommentEntity, { nullable: true })
+  getComment(@Args('id') id: number): Promise<CommentEntity> {
+    return this.commentService.getComment(id);
   }
 }

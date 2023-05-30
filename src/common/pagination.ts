@@ -1,21 +1,23 @@
-export interface PaginationOptions {
+import { Repository } from 'typeorm';
+
+export interface PaginationOffset {
   limit: number;
   page: number;
 }
 
-export interface PaginationResult<T> {
+export interface PaginationOffsetResult<T> {
   data: T[];
   totalCount: number;
   page: number;
 }
 
 export async function paginate<T>(
-  repository: any,
-  options: PaginationOptions,
-): Promise<PaginationResult<T>> {
+  repository: Repository<T>,
+  options: PaginationOffset,
+): Promise<PaginationOffsetResult<T>> {
   const { limit, page } = options;
 
-  const [data, totalCount] = await repository.getManyAndCount({
+  const [data, totalCount] = await repository.findAndCount({
     take: limit,
     skip: page > 0 ? (page - 1) * limit : 0,
   });

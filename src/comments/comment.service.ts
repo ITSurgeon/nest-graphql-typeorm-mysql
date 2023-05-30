@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommentEntity } from 'src/comments/dto/comment.dto';
 import {
-  PaginationOptions,
-  PaginationResult,
+  PaginationOffset,
+  PaginationOffsetResult,
   paginate,
 } from 'src/common/pagination';
 import { DeepPartial, Repository } from 'typeorm';
@@ -27,17 +27,17 @@ export class CommentService {
     return this.repository.save(newComment);
   }
 
-  async getComments(
-    paginationOptions: PaginationOptions,
-  ): Promise<PaginationResult<CommentEntity>> {
-    return await paginate<CommentEntity>(this.repository, paginationOptions);
+  getComments(
+    paginationOptions: PaginationOffset,
+  ): Promise<PaginationOffsetResult<CommentEntity>> {
+    return paginate<CommentEntity>(this.repository, paginationOptions);
   }
 
-  async getComment(id: number): Promise<CommentEntity> {
-    return await this.repository.findOneBy({ id });
+  getComment(id: number): Promise<CommentEntity> {
+    return this.repository.findOneBy({ id });
   }
 
-  async deleteComment(id: number): Promise<boolean> {
-    return (await this.repository.delete(id)).affected > 0;
+  deleteComment(id: number): Promise<boolean> {
+    return this.repository.delete(id).then((result) => result.affected > 0);
   }
 }

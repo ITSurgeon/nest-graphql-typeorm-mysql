@@ -16,6 +16,10 @@ export class PostEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Field(() => [CommentEntity])
+  @OneToMany(() => CommentEntity, (comment) => comment.post)
+  comments: CommentEntity[];
+
   @Field()
   @Column()
   text: string;
@@ -31,8 +35,4 @@ export class PostEntity {
   @Field()
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Field(() => [CommentEntity])
-  @OneToMany(() => CommentEntity, (comment) => comment.post)
-  comments: CommentEntity[];
 }
