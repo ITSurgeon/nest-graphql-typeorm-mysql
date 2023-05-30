@@ -3,6 +3,11 @@ import { PostEntity } from 'src/posts/dto/post.dto';
 import { PostCreateInput, PostUpdateInput } from 'src/posts/dto/post.input';
 import { PostPaginationType } from 'src/posts/types/post-pagination.type';
 import { PostService } from './post.service';
+import {
+  PaginationOptions,
+  PaginationResult,
+  paginate,
+} from 'src/common/pagination';
 
 @Resolver('Post')
 export class PostResolver {
@@ -15,14 +20,14 @@ export class PostResolver {
 
   @Mutation(() => PostEntity)
   async updatePost(
-    @Args('id') id: number,
+    @Args('id', { type: () => Int }) id: number,
     @Args('input') input: PostUpdateInput,
   ): Promise<PostEntity> {
     return await this.postService.updatePost(id, input);
   }
 
   @Mutation(() => Boolean)
-  deletePost(@Args('id') id: number): Promise<boolean> {
+  deletePost(@Args('id', { type: () => Int }) id: number): Promise<boolean> {
     return this.postService.deletePost(id);
   }
 
@@ -31,11 +36,11 @@ export class PostResolver {
     @Args('limit', { type: () => Int, defaultValue: 10 }) limit: number,
     @Args('page', { type: () => Int, defaultValue: 1 }) page: number,
   ): Promise<PostPaginationType> {
-    return await this.postService.getPosts(limit, page);
+    return await this.postService.getPosts({ limit, page });
   }
 
   @Query(() => PostEntity)
-  getPost(@Args('id') id: number): Promise<PostEntity> {
+  getPost(@Args('id', { type: () => Int }) id: number): Promise<PostEntity> {
     return this.postService.getPost(id);
   }
 }

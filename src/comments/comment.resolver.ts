@@ -3,6 +3,7 @@ import { CommentEntity } from 'src/comments/dto/comment.dto';
 import { CommentCreateInput } from 'src/comments/dto/comment.input';
 import { CommentService } from './comment.service';
 import { CommentPaginationType } from './types/comment-pagination.type';
+import { PaginationResult } from '../common/pagination';
 
 @Resolver('Comment')
 export class CommentResolver {
@@ -26,8 +27,8 @@ export class CommentResolver {
     @Args('limit', { type: () => Number, defaultValue: 10 }) limit: number,
     @Args('page', { type: () => Number, defaultValue: 1 }) page: number,
   ): Promise<CommentPaginationType> {
-    return await this.commentService.getComments(limit, page);
-  }
+    return await this.commentService.getComments({ limit, page });
+    }
 
   @Query(() => CommentEntity)
   async getComment(@Args('id') id: number): Promise<CommentEntity> {

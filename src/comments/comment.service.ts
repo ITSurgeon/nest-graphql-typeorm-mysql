@@ -6,7 +6,6 @@ import {
   PaginationResult,
   paginate,
 } from 'src/common/pagination';
-import { PostEntity } from 'src/posts/dto/post.dto';
 import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
@@ -17,8 +16,8 @@ export class CommentService {
   ) {}
 
   createComment(
-    definition: DeepPartial<CommentEntity>,
     postId: number,
+    definition: DeepPartial<CommentEntity>,
   ): Promise<CommentEntity> {
     const newComment = this.repository.create({
       ...definition,
@@ -30,8 +29,8 @@ export class CommentService {
 
   async getComments(
     paginationOptions: PaginationOptions,
-  ): Promise<PaginationResult<PostEntity>> {
-    return await paginate<PostEntity>(this.repository, paginationOptions);
+  ): Promise<PaginationResult<CommentEntity>> {
+    return await paginate<CommentEntity>(this.repository, paginationOptions);
   }
 
   async getComment(id: number): Promise<CommentEntity> {
