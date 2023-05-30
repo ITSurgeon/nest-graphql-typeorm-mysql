@@ -3,44 +3,39 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PostEntity } from 'src/posts/dto/post.dto';
 import { DeepPartial, Repository } from 'typeorm';
 import { PostUpdateInput } from './dto/post.input';
+import {
+  PaginationOptions,
+  PaginationResult,
+  paginate,
+} from 'src/common/pagination';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(PostEntity)
-    private postRepository: Repository<PostEntity>,
+    private repository: Repository<PostEntity>,
   ) {}
 
-  createPost(definition: DeepPartial<PostEntity>): Promise<PostEntity> {
-    return this.postRepository.save(definition);
+  async createPost(definition: DeepPartial<PostEntity>): Promise<PostEntity> {
+    return await this.repository.save(definition);
   }
 
   async getPosts(
-    limit: number,
-    page: number,
-  ): Promise<{ data: PostEntity[]; totalCount: number; page: number }> {
-    const [posts, totalCount] = await this.postRepository.findAndCount({
-      take: limit,
-      skip: page > 0 ? (page - 1) * limit : 0,
-    });
-
-    return {
-      data: posts,
-      totalCount,
-      page,
-    };
+    paginationOptions: PaginationOptions,
+  ): Promise<PaginationResult<PostEntity>> {
+    return await paginate<PostEntity>(this.repository, paginationOptions);
   }
 
   async getPost(id: number): Promise<PostEntity> {
-    return await this.postRepository.findOneBy({ id });
+    return await this.repository.findOneBy({ id });
   }
 
   async updatePost(id: number, input: PostUpdateInput): Promise<PostEntity> {
-    await this.postRepository.update({ id }, { ...input });
-    return await this.postRepository.findOneBy({ id });
+    await this.repository.update({ id }, { ...input });
+    return await this.repository.findOneBy({ id });
   }
 
   async deletePost(id: number): Promise<boolean> {
-    return (await this.postRepository.delete(id)).affected > 0;
+    return (await this.repository.delete(id)).affected > 0;
   }
 }

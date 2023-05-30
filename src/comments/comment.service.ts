@@ -1,48 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommentEntity } from 'src/comments/dto/comment.dto';
+import {
+  PaginationOptions,
+  PaginationResult,
+  paginate,
+} from 'src/common/pagination';
+import { PostEntity } from 'src/posts/dto/post.dto';
 import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
 export class CommentService {
   constructor(
     @InjectRepository(CommentEntity)
-    private commentRepository: Repository<CommentEntity>,
+    private repository: Repository<CommentEntity>,
   ) {}
 
   createComment(
-    postId: number,
     definition: DeepPartial<CommentEntity>,
+    postId: number,
   ): Promise<CommentEntity> {
-    const newComment = this.commentRepository.create({
+    const newComment = this.repository.create({
       ...definition,
       post: { id: postId },
     });
 
-    return this.commentRepository.save(newComment);
+    return this.repository.save(newComment);
   }
 
   async getComments(
-    limit: number,
-    page: number,
-  ): Promise<{ data: CommentEntity[]; totalCount: number; page: number }> {
-    const [comments, totalCount] = await this.commentRepository.findAndCount({
-      take: limit,
-      skip: page > 0 ? (page - 1) * limit : 0,
-    });
-
-    return {
-      data: comments,
-      totalCount,
-      page,
-    };
+    paginationOptions: PaginationOptions,
+  ): Promise<PaginationResult<PostEntity>> {
+    return await paginate<PostEntity>(this.repository, paginationOptions);
   }
 
   async getComment(id: number): Promise<CommentEntity> {
-    return await this.commentRepository.findOneBy({ id });
+    return await this.repository.findOneBy({ id });
   }
 
   async deleteComment(id: number): Promise<boolean> {
-    return (await this.commentRepository.delete(id)).affected > 0;
+    return (await this.repository.delete(id)).affected > 0;
   }
 }
