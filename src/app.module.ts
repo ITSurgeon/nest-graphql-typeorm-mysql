@@ -25,8 +25,8 @@ import { CommentEntity } from './social/dto/comment.dto';
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => ({
         type: 'mysql',
-        username: config.get<string>('TYPEORM_USERNAME'),
-        password: config.get<string>('TYPEORM_PASSWORD'),
+        username: config.get<string>('MYSQL_USERNAME'),
+        password: config.get<string>('MYSQL_PASSWORD'),
         database: config.get<string>('TYPEORM_DATABASE'),
         host: config.get<string>('TYPEORM_HOST'),
         port: config.get<number>('TYPEORM_PORT'),
@@ -36,8 +36,7 @@ import { CommentEntity } from './social/dto/comment.dto';
         logging: true,
       }),
     }),
-    TypeOrmModule.forFeature([PostEntity]),
-    TypeOrmModule.forFeature([CommentEntity]),
+    TypeOrmModule.forFeature([PostEntity, CommentEntity]),
   ],
   providers: [PostService, PostResolver, CommentService, CommentResolver],
 })

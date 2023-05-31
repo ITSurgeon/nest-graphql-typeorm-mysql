@@ -16,8 +16,8 @@ export class PostEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(() => [CommentEntity])
-  @OneToMany(() => CommentEntity, (comment) => comment.post)
+  @Field(() => [CommentEntity], { nullable: true })
+  @OneToMany(() => CommentEntity, (comment) => comment.post, { nullable: true })
   comments: CommentEntity[];
 
   @Field()

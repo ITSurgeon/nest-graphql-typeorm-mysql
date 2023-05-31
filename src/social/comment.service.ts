@@ -28,16 +28,19 @@ export class CommentService {
   }
 
   getComments(
+    postId: number,
     paginationOptions: PaginationOffset,
   ): Promise<PaginationOffsetResult<CommentEntity>> {
-    return paginate<CommentEntity>(this.repository, paginationOptions);
+    const query = { where: { post: { id: postId } } };
+    return paginate<CommentEntity>(this.repository, paginationOptions, query);
   }
 
   getComment(id: number): Promise<CommentEntity> {
     return this.repository.findOneBy({ id });
   }
 
-  deleteComment(id: number): Promise<boolean> {
-    return this.repository.delete(id).then((result) => result.affected > 0);
+  async deleteComment(id: number): Promise<boolean> {
+    const result = await this.repository.delete(id);
+    return result.affected > 0;
   }
 }

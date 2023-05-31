@@ -10,7 +10,7 @@ export class PostCreateInput implements Partial<PostEntity> {
   text?: string;
 
   @ArrayMaxSize(1)
-  @Field(() => [String], { nullable: true })
+  @Field(() => String, { nullable: true })
   image?: string;
 }
 
