@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CommentEntity } from 'src/comments/dto/comment.dto';
-import { CommentCreateInput } from 'src/comments/dto/comment.input';
+import { CommentEntity } from 'src/social/dto/comment.dto';
+import { CommentCreateInput } from 'src/social/dto/comment.input';
 import { CommentService } from './comment.service';
 import { PaginationOffsetResult } from '../common/pagination';
 import { CommentPaginationType } from './types/comment-pagination.type';

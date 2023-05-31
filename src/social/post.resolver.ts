@@ -1,7 +1,7 @@
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { PostEntity } from 'src/posts/dto/post.dto';
-import { PostCreateInput, PostUpdateInput } from 'src/posts/dto/post.input';
-import { PostPaginationType } from 'src/posts/types/post-pagination.type';
+import { PostEntity } from 'src/social/dto/post.dto';
+import { PostCreateInput, PostUpdateInput } from 'src/social/dto/post.input';
+import { PostPaginationType } from 'src/social/types/post-pagination.type';
 import { PostService } from './post.service';
 
 @Resolver('Post')

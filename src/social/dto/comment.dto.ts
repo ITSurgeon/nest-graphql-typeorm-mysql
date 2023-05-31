@@ -1,32 +1,28 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { CommentEntity } from 'src/comments/dto/comment.dto';
+import { PostEntity } from 'src/social/dto/post.dto';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @ObjectType()
-@Entity('posts')
-export class PostEntity {
+@Entity('comments')
+export class CommentEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(() => [CommentEntity])
-  @OneToMany(() => CommentEntity, (comment) => comment.post)
-  comments: CommentEntity[];
+  @Field(() => PostEntity)
+  @ManyToOne(() => PostEntity, (post) => post.comments)
+  post: PostEntity;
 
   @Field()
   @Column()
   text: string;
-
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  image: string;
 
   @Field()
   @CreateDateColumn()

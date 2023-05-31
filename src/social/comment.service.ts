@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CommentEntity } from 'src/comments/dto/comment.dto';
+import { CommentEntity } from 'src/social/dto/comment.dto';
 import {
   PaginationOffset,
   PaginationOffsetResult,

@@ -1,10 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostsModule } from './posts/post.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver } from '@nestjs/apollo';
-import { CommentsModule } from './comments/comment.module';
+import { CommentResolver } from './social/comment.resolver';
+import { CommentService } from './social/comment.service';
+import { PostResolver } from './social/post.resolver';
+import { PostService } from './social/post.service';
+import { PostEntity } from './social/dto/post.dto';
+import { CommentEntity } from './social/dto/comment.dto';
 
 @Module({
   imports: [
@@ -32,9 +36,9 @@ import { CommentsModule } from './comments/comment.module';
         logging: true,
       }),
     }),
-    PostsModule,
-    CommentsModule,
+    TypeOrmModule.forFeature([PostEntity]),
+    TypeOrmModule.forFeature([CommentEntity]),
   ],
-  providers: [],
+  providers: [PostService, PostResolver, CommentService, CommentResolver],
 })
 export class AppModule {}

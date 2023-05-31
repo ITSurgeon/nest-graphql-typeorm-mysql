@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PostEntity } from 'src/posts/dto/post.dto';
+import { PostEntity } from 'src/social/dto/post.dto';
 import { DeepPartial, Repository } from 'typeorm';
 import { PostUpdateInput } from './dto/post.input';
 import {
