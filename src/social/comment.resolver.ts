@@ -24,10 +24,11 @@ export class CommentResolver {
 
   @Query(() => CommentPaginationType)
   getComments(
+    @Args('postId', { type: () => Number }) postId: number,
     @Args('limit', { type: () => Number, defaultValue: 10 }) limit: number,
     @Args('page', { type: () => Number, defaultValue: 1 }) page: number,
   ): Promise<PaginationOffsetResult<CommentEntity>> {
-    return this.commentService.getComments({ limit, page });
+    return this.commentService.getComments({ postId, limit, page });
   }
 
   @Query(() => CommentEntity, { nullable: true })

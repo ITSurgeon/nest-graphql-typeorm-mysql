@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 
 export interface PaginationOffset {
+  postId?: number;
   limit: number;
   page: number;
 }
